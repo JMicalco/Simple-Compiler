@@ -46,16 +46,23 @@ def stmt(tokens):
             id = match(tokens[i], "id")
             assign = match(tokens[i+1], "assign")
             val(tokens[i+2])
-            exp()
+            if id and assign and val:
+                global i
+                i+=1
+            exp(tokens[i+3])
             
     except IndexError:
         raise ("Index out of range error Error")
         
 def val(token):
-    if token.type == "inum":
-        # TODO: write code...
-        
+    if token.type == "inum" or token.type == "fnum":
+       return True
+    else:
+        return False
 
+def exp(tokens[i]):
+    
+    
 def match(token, type):
     if token.type == type:
         return True
