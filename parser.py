@@ -1,19 +1,24 @@
 import scanner as scan
 
-def parser(tokens):
+
+def parser():
     tokens = scan.scanner("f b i a a = 5 b = a + 3.2 p b")
     i = 0
     prog(tokens)
+    return tokens
+
 
 def prog(tokens):
     dcls(tokens)
     stmts(tokens)
     # $
 
+
 def dcls(tokens):
     dcl(tokens)
     dcls(tokens)
     # lambda
+
 
 def dcl(tokens):
     try:
@@ -27,18 +32,20 @@ def dcl(tokens):
         else:
             return "lambda"
     except IndexError:
-        raise ("Index out of range error Error")
+        raise Exception("Index out of range error Error")
+
 
 def stmts(tokens):
     try:
-        if tokens[i].type == "id" or tokens[i].type == "p" :
+        if tokens[i].type == "id" or tokens[i].type == "p":
             stmt(tokens)
             stmts(tokens)
         else:
             if not(tokens[i].type == "$"):
                 return -1
     except IndexError:
-        raise ("Index out of range error Error")
+        raise Exception("Index out of range error Error")
+
 
 def stmt(tokens):
     try:
@@ -48,24 +55,43 @@ def stmt(tokens):
             val(tokens[i+2])
             if id and assign and val:
                 global i
-                i+=1
-            exp(tokens[i+3])
-            
+                i += 1
+            exp(tokens)
+        else:
+            if tokens[i].type == "print":
+                id = match(tokens[i], "id")
+                assign = match(tokens[i+1], "assign")
+                val(tokens[i+2])
+                if id and assign and val:
+                    global i
+                    i += 1
+                exp(tokens)
     except IndexError:
-        raise ("Index out of range error Error")
-        
+        raise Exception("Index out of range error Error")
+
+
 def val(token):
     if token.type == "inum" or token.type == "fnum":
-       return True
+        return True
     else:
         return False
 
-def exp(tokens[i]):
-    
-    
+
+def exp(tokens):
+    try:
+        if tokens[i].type == "plus" or tokens[i].type == "minus":
+            if val(tokens[i+1]):
+                exp(tokens[i+2])
+            else:
+                raise Exception("Value Error")
+        else:
+            raise Exception("Expression Error")
+    except IndexError:
+        raise Exception("Index out of range error Error")
+
+
 def match(token, type):
     if token.type == type:
         return True
     else:
         return False
-
