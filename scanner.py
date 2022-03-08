@@ -41,5 +41,5 @@ def scanner(code):
                 token.append(tk.Token("minus"))
             elif re.search("\+", code[i]):
                 token.append(tk.Token("plus"))
-    # print(token[0].value)
+    token.append(tk.Token("$"))
     return token
